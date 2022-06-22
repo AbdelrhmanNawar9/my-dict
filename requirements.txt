@@ -3,4 +3,5 @@ Flask==2.1.1
 Flask-Session
 requests
 crypt
-werkzeug.security 
+werkzeug
+security 
