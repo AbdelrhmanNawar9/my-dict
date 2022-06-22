@@ -1,0 +1,31 @@
+{% extends "layout.html" %} {% block title %} My custom definitions {% endblock
+%} {% block main %} {% if my_definitions.definitions != None %}
+<div class="container">
+  <h1 class="page-title">My custom definitions:</h1>
+  <table class="table table-striped table-bordered table-my-word-list">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Words = {{my_definitions.definitions_count}}</th>
+        <th scope="col">Translation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for def in my_definitions.definitions %}
+      <tr>
+        <th scope="row">{{loop.index}}</th>
+        <td>
+          <a
+            href="/translate?word={{def.word}}&search-type=definitions"
+            class="list-word"
+          >
+            {{def.word}}
+          </a>
+        </td>
+        <td><span class="table-word-translation">{{def.trans}}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %} You didn't add any custom definitions.{% endif %}{% endblock %}

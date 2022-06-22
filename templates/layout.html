@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <!-- http://getbootstrap.com/docs/5.1/ -->
+    <link
+      crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      rel="stylesheet"
+    />
+    <script
+      crossorigin="anonymous"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Link fontawsome for icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <link href="/static/favicon.png" rel="icon" />
+
+    <link href="/static/styles.css" rel="stylesheet" />
+
+    <!-- jquery  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script defer src="/static/script.js"></script>
+    <script
+      defer
+      src="/static/script{% block script_1 %}{% endblock %}.js"
+    ></script>
+
+    <title>My Dict: {% block title %}{% endblock %}</title>
+  </head>
+
+  <body>
+    <div class="page-container">
+      <nav class="navbar">
+        <a class="navbar-brand" href="/">My Dict</a>
+        {% if session["user_id"] %}
+        <form class="search-form" action="/translate">
+          <input
+            class="search-input"
+            type="search"
+            name="word"
+            autocomplete="off"
+            autofocus
+            placeholder="Search"
+            required
+            speech
+            x-webkit-speech
+          />
+          <select name="search-type" class="search-select">
+            <option value="" disabled>Search For</option>
+            <option value="definitions">Definitions</option>
+            <option value="translation(en-ar)">Translation(en-ar)</option>
+          </select>
+          <button
+            class="btn btn-secondary my-2 my-sm-0 btn-header"
+            type="submit"
+          >
+            Search
+          </button>
+        </form>
+        <div class="dropdown">
+          <button
+            class="btn reg dropdown-toggle btn-text"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            More
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a href="/add_to_word_list" class="dropdown-item">My word list</a>
+            <a href="/custom_definition" class="dropdown-item"
+              >My custom definitions</a
+            >
+            <a href="/logout" class="dropdown-item">Log out</a>
+          </div>
+        </div>
+        {% else %}
+        <ul class="nav-actions">
+          <li class="nav-item">
+            <a class="btn reg" href="/register">Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-header" href="/login">Log In</a>
+          </li>
+        </ul>
+        {% endif %}
+      </nav>
+
+      <main class="container-fluid py-5 text-center">
+        {% block main %}{% endblock %}
+      </main>
+
+      <footer class="mb-5 small text-center text-muted">
+        <p style="text-align: center">
+          Copyright &copy;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          <a href="https://twitter.com/ar_nawwar" target="_blank"
+            >Abd ar-Rahman Nawwar</a
+          >
+          All Rights Reserved
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

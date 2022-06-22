@@ -1,0 +1,75 @@
+{% extends "layout.html" %} {% block title %} Index {% endblock %}{% block
+script_1 %}_results{% endblock %} {% block main %}
+<div class="homepage-container">
+  <button type="button" class="btn add-definition">
+    Add a Custom definition
+  </button>
+
+  <div class="features-container">
+    <a class="homepage-feature" href="/add_to_word_list">My Word List</a>
+    <a class="homepage-feature" href="/custom_definition"
+      >My Custom Definitions</a
+    >
+  </div>
+</div>
+<!-- Modal -->
+<div class="overlay hidden"></div>
+<div class="add-definition-window hidden">
+  <button class="btn--close-modal">&times;</button>
+  <h5 class="modal-title">Custome Definition</h5>
+  <form class="form-add-definition" method="post" action="/custom_definition">
+    <div class="form-group">
+      <label for="word">Word</label>
+      <input
+        autocomplete="off"
+        id="word"
+        name="word"
+        type="text"
+        class="form__word"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Definition in English</label>
+      <input autocomplete="off" autofocus name="meaning" type="text" />
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label>* Translation</label>
+          <input autocomplete="off" name="trans" type="text" required />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label>Type</label>
+          <input autocomplete="off" name="type" type="text" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Example</label>
+      <input autocomplete="off" name="example_en" type="text" />
+    </div>
+    <div class="form-group">
+      <label>Translation of the example</label>
+      <input autocomplete="off" name="example_ar" type="text" />
+    </div>
+    <div class="form-group">
+      <label>Usually With</label>
+      <input autocomplete="off" name="usuallywith" type="text" />
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <input autocomplete="off" name="notes" type="text" />
+    </div>
+
+    <input
+      type="submit"
+      class="btn btn-submit-definition"
+      value="Add to my definitions"
+    />
+  </form>
+</div>
+
+{% endblock %}

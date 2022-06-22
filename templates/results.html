@@ -1,0 +1,376 @@
+{% extends "layout.html" %} {% block script_1 %}_results{% endblock %} {% block
+title %} Results {% endblock %} {% block main %}
+<div class="results-header">
+  <h2 class="results-for">Results for <strong>{{results.word}}</strong>:</h2>
+  <div class="results-header__actions">
+    {% if results.online_results != None or results.my_results != None %}
+
+    <!-- <button type="button" class="btn add-to-list">Add to my word list</button> -->
+    <!-- <i class="fa-solid fa-plus btn-add-to-list"></i> -->
+    <i
+    {% if results.in_my_list == False %}
+    class="fa-solid fa-circle-plus btn-add-to-list"
+    title="Add to my word list"
+    {% else %}
+    class="fa-solid fa-circle-minus btn-add-to-list"
+    title="Remove from my word list"
+    {% endif %}
+      data-toggle="tooltip"
+      data-placement="auto"
+    ></i>
+    {% endif %}
+
+    <button type="button" class="btn add-definition">
+      Add a Custom definition
+    </button>
+  </div>
+</div>
+<!-- Modal -->
+<div class="overlay hidden"></div>
+<div class="add-definition-window hidden">
+  <button class="btn--close-modal">&times;</button>
+  <h5 class="modal-title">Custome Definition</h5>
+  <form class="form-add-definition" method="post" action="/custom_definition">
+    <div class="form-group">
+      <label for="word">Word</label>
+      <input
+        autocomplete="off"
+        id="word"
+        name="word"
+        type="text"
+        class="form__word"
+      />
+    </div>
+    <div class="form-group">
+      <label>Definition in English</label>
+      <input autocomplete="off" autofocus name="meaning" type="text" />
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label>* Translation</label>
+          <input autocomplete="off" name="trans" type="text" required />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label>Type</label>
+          <input autocomplete="off" name="type" type="text" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Example</label>
+      <input autocomplete="off" name="example_en" type="text" />
+    </div>
+    <div class="form-group">
+      <label>Translation of the example</label>
+      <input autocomplete="off" name="example_ar" type="text" />
+    </div>
+    <div class="form-group">
+      <label>Usually With</label>
+      <input autocomplete="off" name="usuallywith" type="text" />
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <input autocomplete="off" name="notes" type="text" />
+    </div>
+
+    <input
+      type="submit"
+      class="btn btn-submit-definition"
+      value="Add to my definitions"
+    />
+  </form>
+</div>
+
+{# Display online results #} {% if results.online_results != None %}
+
+<div class="online-results container-fluid">
+  {% set prons = results.online_results[0].entries[0].pronunciations %} {% if
+  prons != None %} {# Pronunciations #}
+
+  <h2 class="sub-result">Pronunciations:</h2>
+  <div class="container pronunciations">
+    {% for pron in prons %}
+
+    <!-- <h2>{{pron}}</h2> -->
+    {% if pron.audioFile%}
+    <div class="pronunciations__pronunciation">
+      <span
+        ><strong>{{ pron.dialects[0]}}:</strong> {{
+        pron.phoneticSpelling}}</span
+      >
+      <audio controls>
+        <source src="{{pron.audioFile}}" type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    {% endif %} {% endfor %} {% endif %}
+  </div>
+
+  <div class="types-container">
+    {% for type in results.online_results %}
+    <div class="result-type">
+      <h2 class="type-heading">
+        Type: <strong>{{type.lexicalCategory.text}}</strong>
+      </h2>
+      <hr />
+      <hr />
+      {% if type.entries[0].inflections != Null %}
+      <p>
+        <strong>Inflections: </strong>{% for inflection in
+        type.entries[0].inflections %}
+        <a
+            class="synonyms-links"
+            href="/translate?word={{inflection.inflectedForm}}&search-type=definitions"
+            >{{inflection.inflectedForm}}</a
+          >,
+        {%endfor%}
+      </p>
+      {% endif %}
+      <!-- <h2>Meanings</h2> -->
+      {% for sense in type.entries[0].senses %}
+      <!-- <h2>{{sense}}</h2> -->
+      <div class="sense">
+        <hr />
+        <hr />
+        {% if sense.registers != Null %}
+        <p>
+          <strong>Type: </strong>{% for reg in sense.registers %}
+          <!-- <h2>{{reg}}</h2> -->
+          <span>{{reg.text}},</span>
+          {%endfor%}
+        </p>
+        {% endif %} {% if sense.definitions != Null %}
+        <p>
+          <strong>Definitions: </strong>{% for def in sense.definitions %}
+          <!-- <h2>{{def}}</h2> -->
+          <span>{{def}}</span>
+          {%endfor%}
+        </p>
+        {% endif %} {% if sense.shortDefinitions != Null %}
+        <p>
+          <strong>Short Definitions: </strong>{% for def in
+          sense.shortDefinitions %}
+          <!-- <h2>{{def}}</h2> -->
+          <span>{{def}}</span>
+          {%endfor%}
+        </p>
+        {% endif %} {% if sense.semanticClasses != Null %}
+        <p>
+          <strong>Semantic Classes: </strong>{% for class in
+          sense.semanticClasses %}
+          <!-- <h2>{{def}}</h2> -->
+          <span>{{class.text}}</span>
+          {%endfor%}
+        </p>
+        {% endif %} {% if sense.domainClasses != Null %}
+        <p>
+          <strong>Domain Classes: </strong>{% for domain in sense.domainClasses
+          %}
+          <!-- <h2>{{def}}</h2> -->
+          <span>{{domain.text}},</span>
+          {%endfor%}
+        </p>
+        {% endif %} {% if sense.domains != Null %}
+        <p>
+          <strong>Domains: </strong>{% for domain in sense.domains %}
+          <!-- <h2>{{def}}</h2> -->
+          <span>{{domain.text}},</span>
+          {%endfor%}
+        </p>
+        {% endif %} {% for translation in sense.translations %}
+        <!-- collocations (usually used with) -->
+        <!-- <h2>{{translation}}</h2> -->
+        <h3><strong>{{translation.text}}</strong></h3>
+        <!-- Notes  -->
+        {% if translation.notes != Null %}
+        <p>
+          <strong>Notes: </strong>{% for note in translation.notes %}
+          <span>{{note.text}},</span>
+          <!-- <p>{{note.text}}</p> -->
+          {%endfor%}
+        </p>
+        {% endif %} {% if translation.collocations != Null %}
+        <p>
+          <strong>Usually with: </strong>{% for coll in translation.collocations
+          %}
+          <span>{{coll.text}},</span>
+          {%endfor%}
+        </p>
+        {% endif %} {% endfor %} {% for example in sense.examples %}
+        <p>
+          <strong>example: </strong>{{example.text}} {% for trans in
+          example.translations %}
+          <span><strong>{{trans.text}},</strong></span>
+          {%endfor%}
+        </p>
+        {%endfor%}
+        <!-- Notes  -->
+        <!-- <h2>{{sense.notes}}</h2> -->
+        {% if sense.notes != Null %}
+        <p>
+          <strong>Notes: </strong>{% for note in sense.notes %}
+          <span>{{note.text}},</span>
+          <!-- <p>{{note.text}}</p> -->
+          {%endfor%}
+        </p>
+        {% endif %} {% if sense.synonyms != Null %}
+        <p>
+          <strong>Synonyms: </strong>{% for synonym in sense.synonyms %}
+          <!-- <h2>{{def}}</h2> -->
+          <a
+            class="synonyms-links"
+            href="/translate?word={{synonym.text}}&search-type=definitions"
+            >{{synonym.text}},</a
+          >
+          {%endfor%}
+        </p>
+        {% endif %} {% if sense.subsenses != Null %}
+        <hr />
+        <div id="accordion-{{loop.index}}-{{type.lexicalCategory.text}}">
+          <div class="card">
+            <div
+              class="card-header"
+              id="heading-{{loop.index}}-{{type.lexicalCategory.text}}"
+            >
+              <h5 class="mb-0">
+                <button
+                  class="btn btn-link btn-show-more"
+                  data-toggle="collapse"
+                  data-target="#collapse-{{loop.index}}-{{type.lexicalCategory.text}}"
+                  aria-expanded="true"
+                  aria-controls="collapse-{{loop.index}}-{{type.lexicalCategory.text}}"
+                >
+                  Subsenses
+                </button>
+              </h5>
+            </div>
+
+            <div
+              id="collapse-{{loop.index}}-{{type.lexicalCategory.text}}"
+              class="collapse"
+              aria-labelledby="heading-{{loop.index}}-{{type.lexicalCategory.text}}"
+              data-parent="#accordion-{{loop.index}}-{{type.lexicalCategory.text}}"
+            >
+              <div class="card-body">
+                <div class="subsenses">
+                  <h2>Subsenses</h2>
+                  <hr />
+
+                  {% for subsense in sense.subsenses %} {% if
+                  subsense.definitions != Null %}
+                  <p>
+                    <strong>Definitions: </strong>{% for def in
+                    subsense.definitions %}
+                    <span>{{def}},</span>
+                    {%endfor%}
+                  </p>
+                  {% endif %} {% if subsense.shortDefinitions != Null %}
+                  <p>
+                    <strong>Short Definitions: </strong>{% for def in
+                    subsense.shortDefinitions %}
+                    <span>{{def}},</span>
+                    {%endfor%}
+                  </p>
+                  {% endif %} {% if subsense.domainClasses != Null %}
+                  <p>
+                    <strong>Domain Classes: </strong>{% for class in
+                    subsense.domainClasses %}
+                    <!-- <h2>{{def}}</h2> -->
+                    <span>{{class.text}}</span>
+                    {%endfor%}
+                  </p>
+                  {% endif %} {% if subsense.semanticClasses != Null %}
+                  <p>
+                    <strong>Semantic Classes: </strong>{% for class in
+                    subsense.semanticClasses %}
+                    <!-- <h2>{{def}}</h2> -->
+                    <span>{{class.text}}</span>
+                    {%endfor%}
+                  </p>
+                  {% endif %} {% if subsense.examples != Null %}
+                  <p>
+                    <strong>Examples: </strong>{% for example in
+                    subsense.examples %}
+                    <span>{{example.text}},</span>
+                    {%endfor%}
+                  </p>
+                  {% endif %} {% if subsense.constructions != Null %}
+                  <p>
+                    <strong>Constructions: </strong>{% for const in
+                    subsense.constructions %}
+                    <span>{{const.text}},</span>
+                    {%endfor%}
+                  </p>
+                  {% endif %} {% if subsense.synonyms != Null %}
+                  <p>
+                    <strong>Synonyms: </strong>{% for synonym in
+                    subsense.synonyms %}
+                    <!-- <h2>{{def}}</h2> -->
+                    <a
+                      class="synonyms-links"
+                      href="/translate?word={{synonym.text}}&search-type=definitions"
+                      >{{synonym.text}},</a
+                    >
+                    {%endfor%}
+                  </p>
+
+                  {% endif %}
+
+                  <hr />
+                  {%endfor%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endif %}
+        <!-- <hr /> -->
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %} {% else %}
+    <p class="results-message">No online results</p>
+    {% endif %}
+  </div>
+</div>
+
+{# Display the custome results #} {% if results.my_results != None %}
+<h2 class="my-definitions-heading">My definitions</h2>
+<div class="my-definitions container-fluid">
+  <!-- <h2>{{results}}</h2> -->
+  <!-- {{results.my_results}} -->
+  {% for def in results.my_results %}
+  <div class="my-definitions__def" data-id="{{def.id}}">
+    <form class="remove-def" action="/remove" method="post">
+      <input type="text" value="{{def.id}}" name="id" hidden />
+      <input type="text" value="{{def.word}}" name="word" hidden />
+      <button type="submit" class="btn-remove">
+        <i class="fa-solid fa-trash fa-2xl"></i>
+      </button>
+    </form>
+
+    {% if def.type != "" %}
+    <p><strong>Type: </strong>{{def.type}}</p>
+    {% endif %} {% if def.meaning != "" %}
+    <p><strong>Definition: </strong>{{def.meaning}}</p>
+    {% endif %} {% if def.trans != "" %}
+    <h3>{{def.trans}}</h3>
+    {% endif %} {% if def.example_en != "" %}
+    <p>
+      <strong>Example: </strong>{{def.example_en}}
+      <span><strong>,{{def.example_ar}}</strong></span>
+    </p>
+    {% endif %} {% if def.usuallywith != "" %}
+    <p><strong>Usually With: </strong>{{def.usuallywith}}</p>
+    {% endif %} {% if def.notes != "" %}
+    <p><strong>Notes: </strong>{{def.notes}}</p>
+    {% endif %}
+  </div>
+  <hr />
+  {%endfor%}
+</div>
+{% endif %} {% endblock %}
