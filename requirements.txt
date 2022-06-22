@@ -2,6 +2,6 @@ cs50
 Flask==2.1.1
 Flask-Session
 requests
-crypt
-werkzeug
-security 
+# crypt
+# werkzeug
+# security 
