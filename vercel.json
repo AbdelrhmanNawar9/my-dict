@@ -14,5 +14,10 @@
       "src": "/(.*)",
       "dest": "/"
     }
-  ]
+  ],
+  "functions": {
+    "app.py": {
+      "includeFiles": "templates/**"
+    }
+  }
 }
