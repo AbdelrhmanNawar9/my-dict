@@ -20,7 +20,7 @@ import requests
 import json
 
 # import arabic_reshaper
-from bidi.algorithm import get_display
+# from bidi.algorithm import get_display
 
 
 # Configure application
