@@ -330,3 +330,6 @@ def remove_word_list():
     
     return jsonify({"status":"ok", "message": "Successfully removed from word list"}) 
     
+    
+if __name__ == "__main__":
+    create_app().run()
