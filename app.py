@@ -19,7 +19,7 @@ import json
 import requests
 import json
 
-import arabic_reshaper
+# import arabic_reshaper
 from bidi.algorithm import get_display
 
 
